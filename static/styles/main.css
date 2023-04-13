@@ -1,0 +1,10 @@
+.navbar{
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+}
+h1{
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+}
