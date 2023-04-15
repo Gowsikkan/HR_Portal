@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'HR_Portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'sys',
+        'NAME' : 'hr_portal',
         'USER': 'root',
         'HOST': 'localhost',
         'PASSWORD': '2001'
@@ -129,4 +129,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
- 
+
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'images') 
