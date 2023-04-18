@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<html>
+<head>
+    <script src="{% static 'attendance.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    // Get the check-in and check-out button elements by ID
+    var checkInBtn = document.getElementById("check-in-btn");
+    var checkOutBtn = document.getElementById("check-out-btn");
+    
+    // Check if there is a check-in/check-out state stored in localStorage
+    var checkState = localStorage.getItem("checkState");
+    if (checkState === "checkedIn") {
+        checkInBtn.style.display = "none";
+        checkOutBtn.style.display = "inline-block";
+    } else {
+        checkInBtn.style.display = "inline-block";
+        checkOutBtn.style.display = "none";
+    }
+    
+    // Add a click event listener to the check-in button
+    checkInBtn.addEventListener("click", function checkIn() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'checkinn' %}",
+            data: {},
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            success: function() {
+                // Get the current time
+                var startTime = new Date().getTime();
+                 // Set the start time to localStorage
+                
+                // Start the timer and update the elapsed time every second
+                var timer = setInterval(function() {
+                   var startTime =  parseInt(localStorage.getItem("startTime"));
+                  
+                    // Get the current time and calculate the elapsed time
+                    var currentTime = new Date().getTime();
+                    
+                    var elapsedTime = currentTime - startTime;
+                    
+                    // Calculate the remaining time (8 hours - elapsed time)
+                    var remainingTime = 8 * 60 * 60 * 1000 - elapsedTime;
+                    
+                    // If the remaining time is negative, stop the timer and alert the user
+                    if (remainingTime < 0) {
+                        clearInterval(timer);
+                        alert("You have been checked in for 8 hours. Please check out.");
+                    }
+                    
+                    // Convert the remaining time to hours, minutes, and seconds
+                    var hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                    var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                    
+                    // Format the remaining time as HH:MM:SS
+                    var formattedTime = ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+                    
+                    // Update the timer element with the formatted time
+                    document.getElementById("timer").innerHTML = formattedTime;
+                    
+              }, 1000);
+              
+                // Toggle the text of the check-in/check-out button
+                checkInBtn.style.display = "none";
+                checkOutBtn.style.display = "inline-block";
+                
+                // Store the check-in state in localStorage
+                localStorage.setItem("checkState", "checkedIn");
+                localStorage.setItem("startTime", new Date().getTime());
+                
+            }
+        });
+    });
+    
+    // Add a click event listener to the check-out button
+    checkOutBtn.addEventListener("click", function() {
+        // Toggle the text of the check-in/check-out button
+        checkInBtn.style.display = "inline-block";
+        checkOutBtn.style.display = "none";
+        localStorage.removeItem("startTime");
+        
+        // Remove the check-in state from localStorage
+        localStorage.removeItem("checkState")})
+        })
+        function updateTimer() {
+          var timer = setInterval(function() {
+          var startTime =  parseInt(localStorage.getItem("startTime"));
+                  
+                  // Get the current time and calculate the elapsed time
+                  var currentTime = new Date().getTime();
+                  
+                  var elapsedTime = currentTime - startTime;
+                  
+                  // Calculate the remaining time (8 hours - elapsed time)
+                  var remainingTime = 8 * 60 * 60 * 1000 - elapsedTime;
+                  
+                  // If the remaining time is negative, stop the timer and alert the user
+                  if (remainingTime < 0) {
+                      clearInterval(timer);
+                      alert("You have been checked in for 8 hours. Please check out.");
+                  }
+                  
+                  // Convert the remaining time to hours, minutes, and seconds
+                  var hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                  var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                  var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                  
+  // Update the timer display
+  var formattedTime = ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+                    
+                    // Update the timer element with the formatted time
+                    document.getElementById("timer").innerHTML = formattedTime;
+                                    }, 1000);}
+
+// Call the updateTimer function when the page is loaded
+window.addEventListener("load", updateTimer);
+
+    </script>
+    <style>
+        body {
+  font-family: Arial, sans-serif;
+}
+
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+#timer {
+  display: inline-block;
+  margin: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+p {
+  margin: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color:#f5f5f5;}
+
+    </style>
+
+</head>
+<body>
+    <form method="POST" action="{% url 'checkinn' %}">
+        {% csrf_token %}
+        <button id="check-in-btn" type="button" onclick="checkIn()">Check In</button>
+        <span id="timer">00:00:00</span>
+    </form>
+    
+    <form id method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button id="check-out-btn" type="submit" style="display: none;">Check Out</button>
+    </form>
+    <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Date</th>
+            <th>Present</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Hours Worked</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for attendance in attendance_data %}
+            <tr>
+              <td>{{ attendance.user }}</td>
+              <td>{{ attendance.date }}</td>
+              <td>{{ attendance.present }}</td>
+              <td>{{ attendance.check_in }}</td>
+              <td>{{ attendance.check_out }}</td>
+              <td>{{ attendance.hours_worked }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+</body>
+</html>
+
+{% endblock %}
