@@ -1,7 +1,66 @@
 {% extends 'base.html' %}
 {% load static%}
 {% block content %}
-<h1>home</h1>
+<link rel="stylesheet" href="{% static 'styles/home.css' %}">
+
+<div class="container">
+  
+  <div class="cards">
+      <div class="cards-image">
+          <img src='/static/images/icons8-attendance-50.png'>
+        </div>
+    
+    <div class="cards-box">
+      <h1 class="cards-title">Attendence</h1>
+      <div class="cards-content">
+        <p>
+        96%
+        </p>
+      </div>
+    </div>
+  </div>
+
+<div class="cards">
+  <div class="cards-image">
+    <img src='/static/images/icons8-performance-60.png'>
   </div>
-</div>
+  <div class="cards-box">
+    <h1 class="cards-title">Perfomance</h1>
+    <div class="cards-content">
+      <p>
+      89%
+      </p>
+    </div>
+  </div>
+  </div>
+
+<div class="cards">
+  <div class="cards-image">
+    <img src='/static/images/icons8-leave-64.png'>
+  </div>
+  <div class="cards-box">
+    <h1 class="cards-title">No. of leaves</h1>
+    <div class="cards-content">
+      <p>
+      6
+      </p>
+    </div>
+  </div>
+  </div>
+
+<div class="cards">
+  <div class="cards-image">
+    <img src='/static/images/icons8-hourglass-50.png'>
+  </div>
+  <div class="cards-box">
+    <h1 class="cards-title">Working hours</h1>
+    <div class="cards-content">
+      <p>
+      377
+      </p>
+    </div>
+  </div>
+  </div>
+
+
 {% endblock %}

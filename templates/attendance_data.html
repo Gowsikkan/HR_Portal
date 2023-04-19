@@ -3,8 +3,7 @@
 {% block content %}
 
 <html>
-<head>
-    <script src="{% static 'attendance.js' %}"></script>
+<head><link rel="stylesheet" href="{% static 'styles/att.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -121,54 +120,6 @@
 window.addEventListener("load", updateTimer);
 
     </script>
-    <style>
-        body {
-  font-family: Arial, sans-serif;
-}
-
-button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #3e8e41;
-}
-
-#timer {
-  display: inline-block;
-  margin: 10px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-p {
-  margin: 10px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-tr:hover {background-color:#f5f5f5;}
-
-    </style>
 
 </head>
 <body>
@@ -182,31 +133,6 @@ tr:hover {background-color:#f5f5f5;}
         {% csrf_token %}
         <button id="check-out-btn" type="submit" style="display: none;">Check Out</button>
     </form>
-    <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Date</th>
-            <th>Present</th>
-            <th>Check In</th>
-            <th>Check Out</th>
-            <th>Hours Worked</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for attendance in attendance_data %}
-            <tr>
-              <td>{{ attendance.user }}</td>
-              <td>{{ attendance.date }}</td>
-              <td>{{ attendance.present }}</td>
-              <td>{{ attendance.check_in }}</td>
-              <td>{{ attendance.check_out }}</td>
-              <td>{{ attendance.hours_worked }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      
 </body>
 </html>
 

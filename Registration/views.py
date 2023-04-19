@@ -5,7 +5,6 @@ from django.contrib import messages
 # Create your views here.
 
 def login(request):
-    
     if request.method =="POST":
         id= request.POST['emp_id']
         password = request.POST['password']
@@ -33,7 +32,10 @@ def annoucement(request):
     return render(request,'announcement.html',{'details':details}) 
 
 def attendence(request):
-    return render(request,'attendence.html') 
+    attendance_data = Attendance.objects.all()
+    attendance_data = Attendance.objects.filter(user=request.session['username'])
+  
+    return render(request,'att.html',context = {'attendance_data': attendance_data}) 
 
 def request(request):
     return render(request,'request.html') 
@@ -53,7 +55,6 @@ def checkin(request):
     #return HttpResponse("Hello, world. You're at the polls index.")
 
 def checkout(request):
-    
     attendance = Attendance.objects.filter(user=request.session['username'], check_out__isnull=True).first()
     if attendance:
         attendance.save()
